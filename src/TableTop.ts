@@ -103,7 +103,9 @@ export class TableTop {
   /**
    * Announce the X,Y and F of the robot through the standard output
    */
-  report() {}
+  report() {
+    console.log(this.currentPosition);
+  }
 
   processCommands(commands: Command[]) {
     if (!commands.length) return;
