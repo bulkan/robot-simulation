@@ -4,11 +4,9 @@ type ValidCommands = (typeof validCommands)[number];
 
 export class Command {
   name: string;
-  args: string | undefined;
 
-  constructor(name: ValidCommands, args?: string) {
+  constructor(name: ValidCommands) {
     this.name = name;
-    this.args = args;
   }
 }
 
@@ -17,9 +15,7 @@ export class PlaceCommand extends Command {
   direction: string;
 
   constructor(name: ValidCommands, args: string) {
-    super(name, args);
-
-    this.name = name;
+    super(name);
 
     const argumentTokens = args.split(",");
 

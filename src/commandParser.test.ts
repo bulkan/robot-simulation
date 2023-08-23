@@ -20,7 +20,6 @@ describe("parseCommandFile", () => {
     expect(parseCommandFile("foo/bar")).toMatchInlineSnapshot(`
       [
         PlaceCommand {
-          "args": "0,0,NORTH",
           "direction": "NORTH",
           "name": "PLACE",
           "position": {
@@ -29,11 +28,9 @@ describe("parseCommandFile", () => {
           },
         },
         Command {
-          "args": undefined,
           "name": "MOVE",
         },
         Command {
-          "args": undefined,
           "name": "REPORT",
         },
       ]
