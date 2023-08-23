@@ -16,16 +16,15 @@ describe("TableTop", () => {
   describe("MOVE", () => {
     const moveCommands = Array.from({ length: 10 }, () => new Command("MOVE"));
 
-    const testTable = [
-      ["0,0", "NORTH", "0,4,NORTH"],
-      ["0,4", "SOUTH", "0,0,SOUTH"],
-      ["0,4", "EAST", "4,4,EAST"],
-      ["4,4", "WEST", "0,4,WEST"],
-    ];
-
-    it.each(testTable)(
-      `when initial position is %s and direction is %s it should result in %s`,
-      (initialPosition, direction, expected) => {
+    it.each`
+      initialPosition | direction  | expectedResult
+      ${"0,0"}        | ${"NORTH"} | ${"0,4,NORTH"}
+      ${"0,4"}        | ${"SOUTH"} | ${"0,0,SOUTH"}
+      ${"0,4"}        | ${"EAST"}  | ${"4,4,EAST"}
+      ${"4,4"}        | ${"WEST"}  | ${"0,4,WEST"}
+    `(
+      `when initial position is $initialPosition and direction is $direction it should result in $expectedResult`,
+      ({ initialPosition, direction, expectedResult }) => {
         const tableTop = new TableTop();
         const commands = [
           new PlaceCommand(`${initialPosition},${direction}`),
@@ -33,7 +32,7 @@ describe("TableTop", () => {
         ];
 
         tableTop.processCommands(commands);
-        expect(tableTop.currentPosition).toEqual(expected);
+        expect(tableTop.currentPosition).toEqual(expectedResult);
       }
     );
   });
