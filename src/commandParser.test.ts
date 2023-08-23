@@ -48,8 +48,6 @@ describe("parseCommandFile", () => {
 });
 
 describe("parseCommandString", () => {
-  const testTable = [["MOVE", "Sunday"]];
-
   it("should validate that first command is always PLACE", () => {
     expect(() => parseCommandString(`MOVE`)).toThrow(
       "PLACE should be the first command"

@@ -1,1 +1,1 @@
-export type Direction = "north" | "east" | "south" | "west";
+export type Direction = "NORTH" | "EAST" | "SOUTH" | "WEST";

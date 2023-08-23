@@ -1,3 +1,5 @@
+import { Direction } from "./types";
+
 const validCommands = ["move", "place", "left", "right"];
 
 type ValidCommands = (typeof validCommands)[number];
@@ -12,7 +14,7 @@ export class Command {
 
 export class PlaceCommand extends Command {
   position: { x: number; y: number };
-  direction: string;
+  direction: Direction;
 
   constructor(args: string) {
     super("PLACE");
@@ -31,6 +33,7 @@ export class PlaceCommand extends Command {
       x: parseInt(argumentTokens[0]),
       y: parseInt(argumentTokens[1]),
     };
-    this.direction = argumentTokens[2];
+
+    this.direction = argumentTokens[2] as Direction;
   }
 }
