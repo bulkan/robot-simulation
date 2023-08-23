@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { pipe } from "remeda";
 
 const validCommands = ["move", "place", "left", "right"];
 
@@ -7,21 +6,48 @@ type ValidCommands = (typeof validCommands)[number];
 
 class Command {
   name: string;
-  args: string[] | undefined;
+  args: string | undefined;
 
-  constructor(name: ValidCommands, args?: string[]) {
+  constructor(name: ValidCommands, args?: string) {
     this.name = name;
     this.args = args;
   }
 }
 
+class PlaceCommand extends Command {
+  position: { x: number; y: number };
+  direction: string;
+
+  constructor(name: ValidCommands, args: string) {
+    super(name, args);
+
+    this.name = name;
+
+    const argumentTokens = args.split(",");
+
+    if (
+      !argumentTokens ||
+      argumentTokens?.length === 0 ||
+      argumentTokens.length < 3
+    ) {
+      throw new Error("PLACE command is missing arguments");
+    }
+
+    this.position = {
+      x: parseInt(argumentTokens[0]),
+      y: parseInt(argumentTokens[1]),
+    };
+    this.direction = argumentTokens[2];
+  }
+}
+
 export const processLine = (line: string) => {
   const tokens = line.split(" ");
-  const [command, ...args] = tokens;
+  const [command, args] = tokens;
 
   switch (command.toLowerCase()) {
     case "place":
-      return new Command(command, args);
+      return new PlaceCommand(command, args);
     case "report":
     case "move":
     case "left":
@@ -34,24 +60,20 @@ export const processLine = (line: string) => {
 
 const cleanLines = (lines: string[]) => {
   return lines
-    .filter((line) => line.length) // empty lines
     .map((line) => line.trim()) // trim white space
+    .filter((line) => line.length) // empty lines
     .filter((line) => !line.startsWith("#")); // comment lines
-};
-
-const validateCommands = (commands: Command[]) => {
-  const isPlaceCommandFirst = () => commands?.[0].name === "place";
-
-  return pipe(commands, isPlaceCommandFirst);
 };
 
 export const parseCommandString = (commandString: string): Command[] => {
   // split the file data into lines and process
-  const commands = pipe(
-    commandString.toString().split("\n"),
-    cleanLines,
-    (lines) => lines.map(processLine)
-  );
+
+  const lines = commandString.toString().split("\n");
+  const commands = cleanLines(lines).map(processLine);
+
+  if (commands?.[0].name.toLowerCase() !== "place") {
+    throw new Error("PLACE should be the first command");
+  }
 
   return commands;
 };

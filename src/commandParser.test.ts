@@ -19,11 +19,14 @@ describe("parseCommandFile", () => {
 
     expect(parseCommandFile("foo/bar")).toMatchInlineSnapshot(`
       [
-        Command {
-          "args": [
-            "0,0,NORTH",
-          ],
+        PlaceCommand {
+          "args": "0,0,NORTH",
+          "direction": "NORTH",
           "name": "PLACE",
+          "position": {
+            "x": 0,
+            "y": 0,
+          },
         },
         Command {
           "args": undefined,
@@ -39,15 +42,21 @@ describe("parseCommandFile", () => {
 });
 
 describe("parseCommandString", () => {
-  const testTable = [[0, "Sunday"]];
+  const testTable = [["MOVE", "Sunday"]];
+
+  it("should validate that first command is always PLACE", () => {
+    expect(() => parseCommandString(`MOVE`)).toThrow(
+      "PLACE should be the first command"
+    );
+  });
 
   it("should throw if input contains unknown command", () => {
-    expect(
+    expect(() =>
       parseCommandString(`
         PLACE 0,0,NORTH
         MOVE
         MOVE 
-        # WAT
+        WAT
     `)
     ).toThrow("Unknown command: WAT");
   });
