@@ -14,8 +14,8 @@ export class PlaceCommand extends Command {
   position: { x: number; y: number };
   direction: string;
 
-  constructor(name: ValidCommands, args: string) {
-    super(name);
+  constructor(args: string) {
+    super("PLACE");
 
     const argumentTokens = args.split(",");
 

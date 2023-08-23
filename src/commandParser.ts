@@ -3,18 +3,18 @@ import { PlaceCommand, Command } from "./Command";
 
 export const processLine = (line: string) => {
   const tokens = line.split(" ");
-  const [command, args] = tokens;
+  const [commandString, args] = tokens;
 
-  switch (command.toLowerCase()) {
+  switch (commandString.toLowerCase()) {
     case "place":
-      return new PlaceCommand(command, args);
+      return new PlaceCommand(args);
     case "report":
     case "move":
     case "left":
     case "right":
-      return new Command(command);
+      return new Command(commandString);
     default:
-      throw new Error(`Unknown command: ${command}`);
+      throw new Error(`Unknown command: ${commandString}`);
   }
 };
 

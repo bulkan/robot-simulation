@@ -6,7 +6,8 @@ jest.mock("node:fs");
 const validInputFile = `
 PLACE 0,0,NORTH
  MOVE  
-    REPORT    
+    REPORT  
+PLACE 1,2,SOUTH  
 
 
 
@@ -32,6 +33,14 @@ describe("parseCommandFile", () => {
         },
         Command {
           "name": "REPORT",
+        },
+        PlaceCommand {
+          "direction": "SOUTH",
+          "name": "PLACE",
+          "position": {
+            "x": 1,
+            "y": 2,
+          },
         },
       ]
     `);
