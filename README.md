@@ -2,7 +2,14 @@
 
 Simple robot simulation app command-line.
 
-To run first install dependencies;
+I used the following versions of node & yarn.
+
+```
+"node": "~18.17",
+"yarn": ">=1.22.0"
+```
+
+To run first install dependencies.
 
 ```
 yarn install
@@ -22,14 +29,9 @@ yarn run [commands-file]
 
 An example run would be;
 
-```yarn run ./samples/1.txt```
+`yarn run ./samples/1.txt`
 
-Or if you want to type from the command line
+# Notes
 
-```
-yarn run < echo '
-PLACE 0,0,NORTH
-MOVE
-REPORT
-'
-```
+- This isn't a proper CLI in the sense that it should probably use `yarn link` along with the `bin` section in
+  `package.json`
