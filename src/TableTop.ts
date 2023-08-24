@@ -1,4 +1,4 @@
-import { Direction } from "./types";
+import { Direction, ValidCommandObject } from "./types";
 import { Command, PlaceCommand } from "./Command";
 
 export class TableTop {
@@ -107,11 +107,15 @@ export class TableTop {
     console.log(this.currentPosition);
   }
 
-  processCommands(commands: Command[]) {
+  processCommands(commands: ValidCommandObject) {
     if (!commands.length) return;
 
     // The parser will ensure first command is a PlaceCommand
-    const initialCommand = commands.shift() as PlaceCommand;
+    const initialCommand = commands.shift();
+
+    if (!(initialCommand instanceof PlaceCommand)) {
+      throw new Error("The first command should be PlaceCommand");
+    }
 
     this.setInitialRobotPosition(initialCommand);
 

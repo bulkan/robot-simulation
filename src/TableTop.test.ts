@@ -1,5 +1,6 @@
 import { Command, PlaceCommand } from "./Command";
 import { TableTop } from "./TableTop";
+import { ValidCommandObject } from "./types";
 
 describe("TableTop", () => {
   describe("describe when PLACEing the robot", () => {
@@ -26,7 +27,10 @@ describe("TableTop", () => {
       `when initial position = "$initialPosition" & direction = "$direction" it should result in $expectedResult`,
       ({ x, y, direction, expectedResult }) => {
         const tableTop = new TableTop();
-        const commands = [new PlaceCommand(x, y, direction), ...moveCommands];
+        const commands: ValidCommandObject = [
+          new PlaceCommand(x, y, direction),
+          ...moveCommands,
+        ];
 
         tableTop.processCommands(commands);
         expect(tableTop.currentPosition).toEqual(expectedResult);
@@ -48,7 +52,7 @@ describe("TableTop", () => {
     `when starting direction = "$initialDirection" then after $turnCount turns direction should be $expectedResult`,
     ({ initialDirection, turnCount, turnDirection, expectedResult }) => {
       const tableTop = new TableTop();
-      const commands = [
+      const commands: ValidCommandObject = [
         new PlaceCommand(0, 0, initialDirection),
         ...Array.from({ length: turnCount }, () => new Command(turnDirection)),
       ];

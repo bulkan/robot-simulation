@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { PlaceCommand, Command } from "./Command";
-import { Direction, validDirections } from "./types";
+import { Direction, ValidCommandObject, validDirections } from "./types";
 
 export const parseArgsForPlaceCommand = (args: string): PlaceCommand => {
   const argumentTokens = args.split(",");
@@ -53,22 +53,27 @@ const cleanLines = (lines: string[]) => {
     .filter((line) => !line.startsWith("#")); // comment lines
 };
 
-export const parseCommandString = (commandString: string): Command[] => {
+export const parseCommandString = (commandString: string) => {
   // split the file data into lines
-  const lines = commandString.toString().split("\n");
-  const commands = cleanLines(lines).map(processLine);
+  const lines = cleanLines(commandString.toString().split("\n"));
 
-  if (commands?.[0].name.toLowerCase() !== "place") {
+  const maybePlaceCommand = processLine(lines[0]);
+
+  const restCommands = lines.slice(1, -1).map(processLine);
+
+  if (!(maybePlaceCommand instanceof PlaceCommand)) {
     throw new Error("PLACE should be the first command");
   }
 
-  return commands;
+  return [maybePlaceCommand, ...restCommands] satisfies ValidCommandObject;
 };
 
-export const parseCommandFile = (commandFilePath: string): Command[] => {
+export const parseCommandFile = (
+  commandFilePath: string
+): ValidCommandObject | null => {
   const data = readFileSync(commandFilePath);
 
-  if (!data.length) return [];
+  if (!data.length) null;
 
   return parseCommandString(data.toString());
 };
