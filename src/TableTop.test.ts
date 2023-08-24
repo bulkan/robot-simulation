@@ -62,4 +62,22 @@ describe("TableTop", () => {
       expect(tableTop.currentPosition).toEqual(expectedResult);
     }
   );
+
+  it("should return correct result given a more complex command list", () => {
+    const commands: ValidCommandObject = [
+      new PlaceCommand(0, 0, "NORTH"),
+      new Command("MOVE"),
+      new Command("MOVE"),
+      new Command("RIGHT"),
+      new Command("RIGHT"),
+      new Command("MOVE"),
+      new Command("LEFT"),
+      new Command("MOVE"),
+      new Command("MOVE"),
+    ];
+
+    const tableTop = new TableTop(5, 5);
+    tableTop.processCommands(commands);
+    expect(tableTop.currentPosition).toEqual(`2,1,EAST`);
+  });
 });

@@ -6,6 +6,8 @@ jest.mock("node:fs");
 const validInputFile = `
 PLACE 0,0,NORTH
  MOVE  
+  # this should be ignored
+
     REPORT  
 PLACE 1,2,SOUTH  
 
