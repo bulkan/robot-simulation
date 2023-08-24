@@ -4,6 +4,7 @@ const config: Config.InitialOptions = {
   verbose: true,
   preset: "ts-jest",
   testEnvironment: "node",
+  testPathIgnorePatterns: ["./lib"],
 };
 
 export default config;
