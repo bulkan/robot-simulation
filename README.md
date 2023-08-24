@@ -24,17 +24,18 @@ yarn test
 Then run by;
 
 ```
-yarn run [commands-file]
+yarn simulate [commands-file]
 ```
 
 An example run would be;
 
-`yarn run ./samples/1.txt`
+```
+yarn simulate ./samples/1.txt
+```
 
 # Notes / Assumptions
 
-- This isn't a proper CLI in the sense that it should probably use `yarn link` along with the `bin` section in
-  `package.json`
+- This isn't a proper CLI in the sense that it should probably use `yarn link` along with the `bin` section in `package.json` as we just run it via `yarn simulate`
 
 - I added support for `# comment` lines in the input file
 
