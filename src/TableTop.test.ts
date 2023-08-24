@@ -5,7 +5,7 @@ describe("TableTop", () => {
   describe("describe when PLACEing the robot", () => {
     it("should always start at (0,0) when initial placement is out of bounds", () => {
       const tableTop = new TableTop();
-      const place = new PlaceCommand("6,2,NORTH");
+      const place = new PlaceCommand(6, 2, "NORTH");
 
       tableTop.setInitialRobotPosition(place);
 
@@ -17,19 +17,16 @@ describe("TableTop", () => {
     const moveCommands = Array.from({ length: 10 }, () => new Command("MOVE"));
 
     it.each`
-      initialPosition | direction  | expectedResult
-      ${"0,0"}        | ${"NORTH"} | ${"0,4,NORTH"}
-      ${"0,4"}        | ${"SOUTH"} | ${"0,0,SOUTH"}
-      ${"0,4"}        | ${"EAST"}  | ${"4,4,EAST"}
-      ${"4,4"}        | ${"WEST"}  | ${"0,4,WEST"}
+      x    | y    | direction  | expectedResult
+      ${0} | ${0} | ${"NORTH"} | ${"0,4,NORTH"}
+      ${0} | ${4} | ${"SOUTH"} | ${"0,0,SOUTH"}
+      ${0} | ${4} | ${"EAST"}  | ${"4,4,EAST"}
+      ${4} | ${4} | ${"WEST"}  | ${"0,4,WEST"}
     `(
       `when initial position = "$initialPosition" & direction = "$direction" it should result in $expectedResult`,
-      ({ initialPosition, direction, expectedResult }) => {
+      ({ x, y, direction, expectedResult }) => {
         const tableTop = new TableTop();
-        const commands = [
-          new PlaceCommand(`${initialPosition},${direction}`),
-          ...moveCommands,
-        ];
+        const commands = [new PlaceCommand(x, y, direction), ...moveCommands];
 
         tableTop.processCommands(commands);
         expect(tableTop.currentPosition).toEqual(expectedResult);
@@ -52,7 +49,7 @@ describe("TableTop", () => {
     ({ initialDirection, turnCount, turnDirection, expectedResult }) => {
       const tableTop = new TableTop();
       const commands = [
-        new PlaceCommand(`0,0,${initialDirection}`),
+        new PlaceCommand(0, 0, initialDirection),
         ...Array.from({ length: turnCount }, () => new Command(turnDirection)),
       ];
 
