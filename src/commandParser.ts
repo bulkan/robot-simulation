@@ -40,9 +40,9 @@ export const processLine = (line: string) => {
     case "left":
     case "right":
       return new Command(commandString);
-    default:
-      throw new Error(`Unknown command: ${commandString}`);
   }
+
+  throw new Error(`Unknown command: ${commandString}`);
 };
 
 // clean up the lines from the input files
@@ -59,7 +59,7 @@ export const parseCommandString = (commandString: string) => {
 
   const maybePlaceCommand = processLine(lines[0]);
 
-  const restCommands = lines.slice(1, -1).map(processLine);
+  const restCommands = lines.slice(1).map(processLine);
 
   if (!(maybePlaceCommand instanceof PlaceCommand)) {
     throw new Error("PLACE should be the first command");
