@@ -3,7 +3,7 @@ import { TableTop } from "./TableTop";
 
 describe("TableTop", () => {
   describe("describe when PLACEing the robot", () => {
-    it("if initial placement is out of bounds it should start at 0,0", () => {
+    it("should always start at (0,0) when initial placement is out of bounds", () => {
       const tableTop = new TableTop();
       const place = new PlaceCommand("6,2,NORTH");
 
@@ -13,7 +13,7 @@ describe("TableTop", () => {
     });
   });
 
-  describe("MOVE", () => {
+  describe("MOVE behaves as expected", () => {
     const moveCommands = Array.from({ length: 10 }, () => new Command("MOVE"));
 
     it.each`
@@ -23,7 +23,7 @@ describe("TableTop", () => {
       ${"0,4"}        | ${"EAST"}  | ${"4,4,EAST"}
       ${"4,4"}        | ${"WEST"}  | ${"0,4,WEST"}
     `(
-      `when initial position is $initialPosition and direction is $direction it should result in $expectedResult`,
+      `when initial position = "$initialPosition" & direction = "$direction" it should result in $expectedResult`,
       ({ initialPosition, direction, expectedResult }) => {
         const tableTop = new TableTop();
         const commands = [
@@ -36,4 +36,29 @@ describe("TableTop", () => {
       }
     );
   });
+
+  it.each`
+    initialDirection | turnCount | turnDirection | expectedResult
+    ${"NORTH"}       | ${4}      | ${"LEFT"}     | ${"0,0,NORTH"}
+    ${"NORTH"}       | ${3}      | ${"LEFT"}     | ${"0,0,EAST"}
+    ${"NORTH"}       | ${2}      | ${"LEFT"}     | ${"0,0,SOUTH"}
+    ${"NORTH"}       | ${1}      | ${"LEFT"}     | ${"0,0,WEST"}
+    ${"EAST"}        | ${4}      | ${"RIGHT"}    | ${"0,0,EAST"}
+    ${"EAST"}        | ${3}      | ${"RIGHT"}    | ${"0,0,NORTH"}
+    ${"EAST"}        | ${2}      | ${"RIGHT"}    | ${"0,0,WEST"}
+    ${"EAST"}        | ${1}      | ${"RIGHT"}    | ${"0,0,SOUTH"}
+  `(
+    `when starting direction = "$initialDirection" then after $turnCount turns direction should be $expectedResult`,
+    ({ initialDirection, turnCount, turnDirection, expectedResult }) => {
+      const tableTop = new TableTop();
+      const commands = [
+        new PlaceCommand(`0,0,${initialDirection}`),
+        ...Array.from({ length: turnCount }, () => new Command(turnDirection)),
+      ];
+
+      tableTop.processCommands(commands);
+
+      expect(tableTop.currentPosition).toEqual(expectedResult);
+    }
+  );
 });
