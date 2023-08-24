@@ -1,5 +1,32 @@
 import { readFileSync } from "node:fs";
 import { PlaceCommand, Command } from "./Command";
+import { Direction, validDirections } from "./types";
+
+export const parseArgsForPlaceCommand = (args: string): PlaceCommand => {
+  const argumentTokens = args.split(",");
+
+  if (
+    !argumentTokens ||
+    argumentTokens?.length === 0 ||
+    argumentTokens.length < 3
+  ) {
+    throw new Error("PLACE command is missing arguments");
+  }
+
+  const direction = argumentTokens[2];
+
+  if (!validDirections.includes(direction)) {
+    throw new Error(
+      `PLACE command received ${direction} which is not a valid compass direction`
+    );
+  }
+
+  return new PlaceCommand(
+    parseInt(argumentTokens[0]),
+    parseInt(argumentTokens[1]),
+    argumentTokens[2] as Direction
+  );
+};
 
 export const processLine = (line: string) => {
   const tokens = line.split(" ");
@@ -7,7 +34,7 @@ export const processLine = (line: string) => {
 
   switch (commandString.toLowerCase()) {
     case "place":
-      return new PlaceCommand(args);
+      return parseArgsForPlaceCommand(args);
     case "report":
     case "move":
     case "left":

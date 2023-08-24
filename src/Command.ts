@@ -16,24 +16,14 @@ export class PlaceCommand extends Command {
   position: { x: number; y: number };
   direction: Direction;
 
-  constructor(args: string) {
+  constructor(x: number, y: number, direction: Direction) {
     super("PLACE");
 
-    const argumentTokens = args.split(",");
-
-    if (
-      !argumentTokens ||
-      argumentTokens?.length === 0 ||
-      argumentTokens.length < 3
-    ) {
-      throw new Error("PLACE command is missing arguments");
-    }
-
     this.position = {
-      x: parseInt(argumentTokens[0]),
-      y: parseInt(argumentTokens[1]),
+      x,
+      y,
     };
 
-    this.direction = argumentTokens[2] as Direction;
+    this.direction = direction;
   }
 }
