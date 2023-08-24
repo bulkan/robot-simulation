@@ -1,3 +1,4 @@
+import { TableTop } from "./TableTop";
 import { parseCommandFile } from "./commandParser";
 
 const main = () => {
@@ -9,7 +10,9 @@ const main = () => {
     process.exit(1);
   }
 
-  parseCommandFile(commandFilePath);
+  const commands = parseCommandFile(commandFilePath);
+  const tableTop = new TableTop();
+  tableTop.processCommands(commands);
 };
 
 if (require.main === module) {

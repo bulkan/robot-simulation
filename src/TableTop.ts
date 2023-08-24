@@ -119,6 +119,21 @@ export class TableTop {
       switch (command.name.toLowerCase()) {
         case "move":
           this.move();
+          break;
+        case "right":
+          this.right();
+          break;
+        case "left":
+          this.left();
+          break;
+        case "report":
+          this.report();
+          break;
+        case "place":
+          const placeCommand = command as PlaceCommand;
+          const { x, y } = placeCommand.position;
+          this.placeRobot(x, y, placeCommand.direction);
+          break;
       }
     }
   }

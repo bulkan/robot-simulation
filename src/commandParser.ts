@@ -18,6 +18,7 @@ export const processLine = (line: string) => {
   }
 };
 
+// clean up the lines from the input files
 const cleanLines = (lines: string[]) => {
   return lines
     .map((line) => line.trim()) // trim white space
@@ -26,8 +27,7 @@ const cleanLines = (lines: string[]) => {
 };
 
 export const parseCommandString = (commandString: string): Command[] => {
-  // split the file data into lines and process
-
+  // split the file data into lines
   const lines = commandString.toString().split("\n");
   const commands = cleanLines(lines).map(processLine);
 
